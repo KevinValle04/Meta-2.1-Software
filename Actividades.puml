@@ -1,0 +1,33 @@
+@startuml
+title Actividad: Revisión de Artículo (Offline First)
+
+|Revisor|
+start
+:Selecciona tarjeta en columna "Recibidos";
+
+|Sistema PWA|
+:Recupera Artículo y PDF (Blob) de IndexedDB;
+:Genera URL temporal del PDF;
+:Muestra Visor y Formulario de Comentarios;
+:Cambia estado visual a "En Revisión";
+
+|Revisor|
+:Lee el PDF en el visor;
+:Escribe comentarios en el formulario;
+:Presiona botón "Guardar / Finalizar";
+
+|Sistema PWA|
+:Captura datos del formulario;
+:Actualiza registro en IndexedDB (Local);
+if (¿Hay conexión a internet?) then (Sí)
+  :Sincroniza estado (Simulado);
+  :Muestra "Guardado y Sincronizado";
+else (No)
+  :Mantiene flag "Pendiente de Sync";
+  :Muestra "Guardado en Dispositivo (Offline)";
+endif
+:Mueve tarjeta a columna "Completados";
+
+|Revisor|
+stop
+@enduml

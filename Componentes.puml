@@ -1,0 +1,24 @@
+@startuml
+title Diagrama de Componentes - Revista PWA
+
+package "Navegador del Cliente (Browser)" {
+    
+    component [Service Worker\n(sw.js)] as SW <<Infrastructure>>
+    
+    package "Single Page App" {
+        component [Vista HTML\n(index.html)] as UI <<Presentation>>
+        component [Controlador\n(app.js)] as CTRL <<Logic>>
+        component [Gestor BD\n(db.js)] as DB <<Persistence>>
+    }
+
+    database "IndexedDB\n(Browser Storage)" as IDB
+
+    UI ..> CTRL : Eventos DOM
+    CTRL ..> UI : Renderizado
+    CTRL --> DB : CRUD Operations
+    DB --> IDB : Read/Write Blobs & JSON
+    
+    SW ..> UI : Intercepta Requests\n(Cache First)
+}
+
+@enduml

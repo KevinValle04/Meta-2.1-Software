@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revista Académica PWA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+<body>
+
+    <header>
+        <h1>🎓 Revista ISA/IA</h1>
+        <span id="connection-status">🟢 Online</span>
+    </header>
+
+    <main>
+        <section id="upload-section">
+            <form id="upload-form">
+                <input type="text" id="inp-title" placeholder="Título del Artículo" required>
+                <input type="text" id="inp-author" placeholder="Autor" required>
+                <input type="file" id="inp-file" accept="application/pdf" required>
+                <button type="submit">Subir Artículo</button>
+            </form>
+        </section>
+
+        <section id="kanban-section" class="kanban-board">
+            <div class="column" id="col-received">
+                <h3>📥 Recibidos</h3>
+                <div class="list" id="list-received"></div>
+            </div>
+            <div class="column" id="col-review">
+                <h3>👀 En Revisión</h3>
+                <div class="list" id="list-review"></div>
+            </div>
+            <div class="column" id="col-done">
+                <h3>✅ Completados</h3>
+                <div class="list" id="list-done"></div>
+            </div>
+        </section>
+
+        <section id="review-section" class="hidden">
+            <button onclick="App.closeReview()">🔙 Volver</button>
+            <h2 id="review-header">Revisando...</h2>
+            
+            <div class="workspace">
+                <iframe id="pdf-viewer" src=""></iframe>
+                <div class="review-controls">
+                    <textarea id="inp-comments" placeholder="Escribe tus observaciones..."></textarea>
+                    <button onclick="App.saveProgress()">💾 Guardar (Local)</button>
+                    <button onclick="App.finalizeReview()" style="background:var(--success)">✅ Finalizar</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker Registrado'));
+        }
+    </script>
+</body>
+</html>

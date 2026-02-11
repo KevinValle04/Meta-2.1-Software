@@ -1,0 +1,30 @@
+@startuml
+title Secuencia: Guardar Revisión
+actor Revisor
+participant "Vista (HTML)" as UI
+participant "App.js (Controlador)" as App
+participant "db.js (Persistencia)" as DB
+database "IndexedDB" as IDB
+
+Revisor -> UI : Clic en "Finalizar Revisión"
+UI -> App : finalizeReview()
+activate App
+
+App -> UI : Obtener valor de textarea (comentarios)
+App -> DB : updateArticle(id, {comments, status: 'done'})
+activate DB
+
+DB -> IDB : Transaction('readwrite')
+activate IDB
+IDB --> DB : Success
+deactivate IDB
+
+DB --> App : Promise Resolved (Updated Data)
+deactivate DB
+
+App -> UI : Alert("Revisión Finalizada")
+App -> UI : renderKanban() (Mover tarjeta)
+deactivate App
+
+UI --> Revisor : Muestra Tablero Actualizado
+@enduml
